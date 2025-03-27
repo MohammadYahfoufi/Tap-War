@@ -4,7 +4,7 @@ import 'dart:math';
 class GameScreen extends StatefulWidget {
   final String mode;
 
-  const GameScreen({super.key, required this.mode});
+  GameScreen({required this.mode});
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -15,7 +15,7 @@ class _GameScreenState extends State<GameScreen> {
   int _flexRed = 10;
   int _flexBlue = 10;
   String _winner = '';
-  final bool _canRestartGame = true;
+  bool _canRestartGame = true;
 
   // Timer Mode
   int _timeLeft = 20;
@@ -24,8 +24,8 @@ class _GameScreenState extends State<GameScreen> {
   // Power-Up logic
   final Random _random = Random();
   bool _powerUpVisible = false;
-  Offset _powerUpRedPosition = const Offset(100, 500);
-  Offset _powerUpBluePosition = const Offset(100, 200);
+  Offset _powerUpRedPosition = Offset(100, 500);
+  Offset _powerUpBluePosition = Offset(100, 200);
   String _currentPowerUpRed = 'shield';
   String _currentPowerUpBlue = 'shield';
   String _activePowerUpRed = '';
@@ -47,7 +47,7 @@ class _GameScreenState extends State<GameScreen> {
     _timerRunning = true;
     Future.doWhile(() async {
       if (_timeLeft > 0 && _winner.isEmpty && _gameStarted) {
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(Duration(seconds: 1));
         setState(() => _timeLeft--);
         return true;
       } else {
@@ -80,7 +80,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _schedulePowerUpSpawn() {
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 5), () {
       if (!_gameStarted || _winner.isNotEmpty || widget.mode != 'normal') return;
       setState(() {
         _powerUpVisible = true;
@@ -95,19 +95,18 @@ class _GameScreenState extends State<GameScreen> {
 
   void _collectPowerUp(String player, String type) {
     setState(() => _powerUpVisible = false);
-    if (type == 'shield') {
-      _applyShield(player);
-    } else if (type == 'boost') _applyBoost(player);
+    if (type == 'shield') _applyShield(player);
+    else if (type == 'boost') _applyBoost(player);
     else if (type == 'double') _applyDoubleTap(player);
   }
 
   void _applyShield(String player) {
     if (player == 'red') {
       _activePowerUpRed = 'shield';
-      Future.delayed(const Duration(seconds: 1), () => setState(() => _activePowerUpRed = ''));
+      Future.delayed(Duration(seconds: 1), () => setState(() => _activePowerUpRed = ''));
     } else {
       _activePowerUpBlue = 'shield';
-      Future.delayed(const Duration(seconds: 1), () => setState(() => _activePowerUpBlue = ''));
+      Future.delayed(Duration(seconds: 1), () => setState(() => _activePowerUpBlue = ''));
     }
   }
 
@@ -118,13 +117,13 @@ class _GameScreenState extends State<GameScreen> {
         _flexRed = (_flexRed + 4).clamp(0, 20);
         _flexBlue = (_flexBlue - 4).clamp(0, 20);
         _checkWinner();
-        Future.delayed(const Duration(seconds: 3), () => setState(() => _activePowerUpRed = ''));
+        Future.delayed(Duration(seconds: 3), () => setState(() => _activePowerUpRed = ''));
       } else {
         _activePowerUpBlue = 'boost';
         _flexBlue = (_flexBlue + 4).clamp(0, 20);
         _flexRed = (_flexRed - 4).clamp(0, 20);
         _checkWinner();
-        Future.delayed(const Duration(seconds: 3), () => setState(() => _activePowerUpBlue = ''));
+        Future.delayed(Duration(seconds: 3), () => setState(() => _activePowerUpBlue = ''));
       }
     });
   }
@@ -283,14 +282,14 @@ class _GameScreenState extends State<GameScreen> {
                               child: Container(
                                 width: 120,
                                 height: 120,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.white,
                                 ),
                                 child: Center(
                                   child: Transform.rotate(
                                     angle: 3.14159,
-                                    child: const Text('Start', style: TextStyle(color: Colors.blue, fontSize: 20)),
+                                    child: Text('Start', style: TextStyle(color: Colors.blue, fontSize: 20)),
                                   ),
                                 ),
                               ),
@@ -326,11 +325,11 @@ class _GameScreenState extends State<GameScreen> {
                               child: Container(
                                 width: 120,
                                 height: 120,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.white,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text('Start', style: TextStyle(color: Colors.red, fontSize: 20)),
                                 ),
                               ),
@@ -346,13 +345,13 @@ class _GameScreenState extends State<GameScreen> {
             if (_winner.isNotEmpty)
               Positioned.fill(
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
+                  duration: Duration(milliseconds: 500),
                   color: _winner.contains('Red') ? Colors.red : Colors.blue,
                   child: Center(
                     child: Container(
                       width: 200,
                       height: 200,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
@@ -380,14 +379,14 @@ class _GameScreenState extends State<GameScreen> {
                 right: 0,
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       'Time Left: $_timeLeft s',
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ),

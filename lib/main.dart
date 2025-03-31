@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'home_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Unity Ads
   UnityAds.init(
-    gameId: '5823812', // Your Android Game ID from Unity Dashboard
-    testMode: true,     // Set to false when publishing to the Play Store
+    gameId: '5823812', // Replace with your Unity Game ID
+    testMode: true,
   );
+
+  // Optional: Preload the banner (optional in Unity but nice for speed)
+  UnityAds.load(placementId: 'Banner_Android');
 
   runApp(MyApp());
 }

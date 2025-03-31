@@ -237,10 +237,16 @@ void _checkWinner() {
   if (_flexRed == 20) {
     setState(() => _winner = 'Red Wins!');
     _maybeShowAd();
+     _powerUpVisible = false;
+    _activePowerUpRed = '';
+    _activePowerUpBlue = '';
   }
   if (_flexBlue == 20) {
     setState(() => _winner = 'Blue Wins!');
     _maybeShowAd();
+     _powerUpVisible = false;
+    _activePowerUpRed = '';
+    _activePowerUpBlue = '';
   }
 }
 

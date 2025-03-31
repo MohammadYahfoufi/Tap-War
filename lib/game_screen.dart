@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
+
 
 class GameScreen extends StatefulWidget {
   final String mode;
@@ -32,16 +34,57 @@ class _GameScreenState extends State<GameScreen> {
   String _activePowerUpBlue = '';
   int _redDoubleTapCount = 0;
   int _blueDoubleTapCount = 0;
+  int _gamesPlayed = 0;
+  bool _isAdReady = false;
+
+
 
   final List<String> _powerUpTypes = ['shield', 'boost', 'double'];
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.mode == 'timer') {
-      _startCountdown();
-    }
+@override
+void initState() {
+  super.initState();
+
+  if (widget.mode == 'timer') {
+    _startCountdown();
   }
+
+  UnityAds.init(gameId: '5823812', testMode: true);
+  UnityAds.load(placementId: 'Interstitial_Android');
+
+  // Simulate readiness
+  Future.delayed(Duration(seconds: 3), () {
+    setState(() => _isAdReady = true);
+  });
+}
+
+
+
+void _maybeShowAd() {
+  if (_isAdReady) {
+    UnityAds.showVideoAd(placementId: 'Interstitial_Android');
+    _isAdReady = false;
+
+    // Load next and assume ready after delay
+    UnityAds.load(placementId: 'Interstitial_Android');
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() => _isAdReady = true);
+    });
+  } else {
+    print('Interstitial not ready, skipping...');
+  }
+}
+
+
+
+void _onGameEnd() {
+  _gamesPlayed++;
+  if (_gamesPlayed % 1 == 0) {
+    _maybeShowAd();
+  }
+}
+
+
 
   void _startCountdown() {
     _timerRunning = true;
@@ -65,33 +108,47 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  void _startGame() {
-    setState(() {
-      _gameStarted = true;
-      _flexRed = 10;
-      _flexBlue = 10;
-      _winner = '';
-      _timeLeft = 20;
-      _redDoubleTapCount = 0;
-      _blueDoubleTapCount = 0;
-    });
-    if (widget.mode == 'normal') _schedulePowerUpSpawn();
-    if (widget.mode == 'timer') _startCountdown();
+void _spawnPowerUp() {
+  setState(() {
+    _powerUpVisible = true;
+    _currentPowerUpRed = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
+    _currentPowerUpBlue = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
+    _powerUpRedPosition = Offset(_random.nextDouble() * 250 + 50, 0);
+    _powerUpBluePosition = Offset(_random.nextDouble() * 250 + 50, 200);
+  });
+}
+
+
+void _startGame() {
+  setState(() {
+    _gameStarted = true;
+    _flexRed = 10;
+    _flexBlue = 10;
+    _winner = '';
+    _timeLeft = 20;
+    _redDoubleTapCount = 0;
+    _blueDoubleTapCount = 0;
+  });
+
+  if (widget.mode == 'normal') {
+    _spawnPowerUp(); // spawn the first one immediately
+    _schedulePowerUpSpawn(); // then schedule the next ones
   }
 
-  void _schedulePowerUpSpawn() {
-    Future.delayed(Duration(seconds: 5), () {
-      if (!_gameStarted || _winner.isNotEmpty || widget.mode != 'normal') return;
-      setState(() {
-        _powerUpVisible = true;
-        _currentPowerUpRed = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
-        _currentPowerUpBlue = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
-        _powerUpRedPosition = Offset(_random.nextDouble() * 250 + 50, 0);
-        _powerUpBluePosition = Offset(_random.nextDouble() * 250 + 50, 200);
-      });
-      _schedulePowerUpSpawn();
-    });
+  if (widget.mode == 'timer') {
+    _startCountdown();
   }
+}
+
+
+void _schedulePowerUpSpawn() {
+  Future.delayed(Duration(seconds: 5), () {
+    if (!_gameStarted || _winner.isNotEmpty || widget.mode != 'normal') return;
+    _spawnPowerUp();
+    _schedulePowerUpSpawn();
+  });
+}
+
 
   void _collectPowerUp(String player, String type) {
     setState(() => _powerUpVisible = false);
@@ -176,10 +233,18 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 
-  void _checkWinner() {
-    if (_flexRed == 20) _winner = 'Red Wins!';
-    if (_flexBlue == 20) _winner = 'Blue Wins!';
+void _checkWinner() {
+  if (_flexRed == 20) {
+    setState(() => _winner = 'Red Wins!');
+    _maybeShowAd();
   }
+  if (_flexBlue == 20) {
+    setState(() => _winner = 'Blue Wins!');
+    _maybeShowAd();
+  }
+}
+
+
 
   Widget _buildPowerUpIcon(String type) {
     IconData icon;

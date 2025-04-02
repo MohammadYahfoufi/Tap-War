@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
-
 class GameScreen extends StatefulWidget {
   final String mode;
 
@@ -37,54 +36,46 @@ class _GameScreenState extends State<GameScreen> {
   int _gamesPlayed = 0;
   bool _isAdReady = false;
 
-
-
   final List<String> _powerUpTypes = ['shield', 'boost', 'double'];
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  if (widget.mode == 'timer') {
-    _startCountdown();
-  }
+    if (widget.mode == 'timer') {
+      _startCountdown();
+    }
 
-  UnityAds.init(gameId: '5823812', testMode: true);
-  UnityAds.load(placementId: 'Interstitial_Android');
-
-  // Simulate readiness
-  Future.delayed(Duration(seconds: 3), () {
-    setState(() => _isAdReady = true);
-  });
-}
-
-
-
-void _maybeShowAd() {
-  if (_isAdReady) {
-    UnityAds.showVideoAd(placementId: 'Interstitial_Android');
-    _isAdReady = false;
-
-    // Load next and assume ready after delay
+    UnityAds.init(gameId: '5823812', testMode: true);
     UnityAds.load(placementId: 'Interstitial_Android');
+
+    // Simulate readiness
     Future.delayed(Duration(seconds: 3), () {
       setState(() => _isAdReady = true);
     });
-  } else {
-    print('Interstitial not ready, skipping...');
   }
-}
 
+  void _maybeShowAd() {
+    if (_isAdReady) {
+      UnityAds.showVideoAd(placementId: 'Interstitial_Android');
+      _isAdReady = false;
 
-
-void _onGameEnd() {
-  _gamesPlayed++;
-  if (_gamesPlayed % 1 == 0) {
-    _maybeShowAd();
+      // Load next and assume ready after delay
+      UnityAds.load(placementId: 'Interstitial_Android');
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() => _isAdReady = true);
+      });
+    } else {
+      print('Interstitial not ready, skipping...');
+    }
   }
-}
 
-
+  void _onGameEnd() {
+    _gamesPlayed++;
+    if (_gamesPlayed % 1 == 0) {
+      _maybeShowAd();
+    }
+  }
 
   void _startCountdown() {
     _timerRunning = true;
@@ -108,62 +99,65 @@ void _onGameEnd() {
     });
   }
 
-void _spawnPowerUp() {
-  setState(() {
-    _powerUpVisible = true;
-    _currentPowerUpRed = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
-    _currentPowerUpBlue = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
-    _powerUpRedPosition = Offset(_random.nextDouble() * 250 + 50, 0);
-    _powerUpBluePosition = Offset(_random.nextDouble() * 250 + 50, 200);
-  });
-}
-
-
-void _startGame() {
-  setState(() {
-    _gameStarted = true;
-    _flexRed = 10;
-    _flexBlue = 10;
-    _winner = '';
-    _timeLeft = 20;
-    _redDoubleTapCount = 0;
-    _blueDoubleTapCount = 0;
-  });
-
-  if (widget.mode == 'normal') {
-    _spawnPowerUp(); // spawn the first one immediately
-    _schedulePowerUpSpawn(); // then schedule the next ones
+  void _spawnPowerUp() {
+    setState(() {
+      _powerUpVisible = true;
+      _currentPowerUpRed = _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
+      _currentPowerUpBlue =
+          _powerUpTypes[_random.nextInt(_powerUpTypes.length)];
+      _powerUpRedPosition = Offset(_random.nextDouble() * 250 + 50, 0);
+      _powerUpBluePosition = Offset(_random.nextDouble() * 250 + 50, 200);
+    });
   }
 
-  if (widget.mode == 'timer') {
-    _startCountdown();
+  void _startGame() {
+    setState(() {
+      _gameStarted = true;
+      _flexRed = 10;
+      _flexBlue = 10;
+      _winner = '';
+      _timeLeft = 20;
+      _redDoubleTapCount = 0;
+      _blueDoubleTapCount = 0;
+    });
+
+    if (widget.mode == 'normal') {
+      _spawnPowerUp(); // spawn the first one immediately
+      _schedulePowerUpSpawn(); // then schedule the next ones
+    }
+
+    if (widget.mode == 'timer') {
+      _startCountdown();
+    }
   }
-}
 
-
-void _schedulePowerUpSpawn() {
-  Future.delayed(Duration(seconds: 5), () {
-    if (!_gameStarted || _winner.isNotEmpty || widget.mode != 'normal') return;
-    _spawnPowerUp();
-    _schedulePowerUpSpawn();
-  });
-}
-
+  void _schedulePowerUpSpawn() {
+    Future.delayed(Duration(seconds: 5), () {
+      if (!_gameStarted || _winner.isNotEmpty || widget.mode != 'normal')
+        return;
+      _spawnPowerUp();
+      _schedulePowerUpSpawn();
+    });
+  }
 
   void _collectPowerUp(String player, String type) {
     setState(() => _powerUpVisible = false);
-    if (type == 'shield') _applyShield(player);
-    else if (type == 'boost') _applyBoost(player);
+    if (type == 'shield')
+      _applyShield(player);
+    else if (type == 'boost')
+      _applyBoost(player);
     else if (type == 'double') _applyDoubleTap(player);
   }
 
   void _applyShield(String player) {
     if (player == 'red') {
       _activePowerUpRed = 'shield';
-      Future.delayed(Duration(seconds: 1), () => setState(() => _activePowerUpRed = ''));
+      Future.delayed(
+          Duration(seconds: 1), () => setState(() => _activePowerUpRed = ''));
     } else {
       _activePowerUpBlue = 'shield';
-      Future.delayed(Duration(seconds: 1), () => setState(() => _activePowerUpBlue = ''));
+      Future.delayed(
+          Duration(seconds: 1), () => setState(() => _activePowerUpBlue = ''));
     }
   }
 
@@ -174,13 +168,15 @@ void _schedulePowerUpSpawn() {
         _flexRed = (_flexRed + 4).clamp(0, 20);
         _flexBlue = (_flexBlue - 4).clamp(0, 20);
         _checkWinner();
-        Future.delayed(Duration(seconds: 3), () => setState(() => _activePowerUpRed = ''));
+        Future.delayed(
+            Duration(seconds: 3), () => setState(() => _activePowerUpRed = ''));
       } else {
         _activePowerUpBlue = 'boost';
         _flexBlue = (_flexBlue + 4).clamp(0, 20);
         _flexRed = (_flexRed - 4).clamp(0, 20);
         _checkWinner();
-        Future.delayed(Duration(seconds: 3), () => setState(() => _activePowerUpBlue = ''));
+        Future.delayed(Duration(seconds: 3),
+            () => setState(() => _activePowerUpBlue = ''));
       }
     });
   }
@@ -196,61 +192,57 @@ void _schedulePowerUpSpawn() {
   }
 
   void _increaseRed() {
-  // Blue has a shield? Then Red can't tap!
-  if (_activePowerUpBlue == 'shield') return;
+    // Blue has a shield? Then Red can't tap!
+    if (_activePowerUpBlue == 'shield') return;
 
-  int power = _redDoubleTapCount > 0 ? 2 : 1;
-  setState(() {
-    _flexRed = (_flexRed + power).clamp(0, 20);
-    _flexBlue = (_flexBlue - power).clamp(0, 20);
+    int power = _redDoubleTapCount > 0 ? 2 : 1;
+    setState(() {
+      _flexRed = (_flexRed + power).clamp(0, 20);
+      _flexBlue = (_flexBlue - power).clamp(0, 20);
 
-    if (_redDoubleTapCount > 0) {
-      _redDoubleTapCount--;
-      if (_redDoubleTapCount == 0) _activePowerUpRed = '';
-    }
+      if (_redDoubleTapCount > 0) {
+        _redDoubleTapCount--;
+        if (_redDoubleTapCount == 0) _activePowerUpRed = '';
+      }
 
-    _checkWinner();
-  });
-}
-
+      _checkWinner();
+    });
+  }
 
   void _increaseBlue() {
-  // Red has a shield? Then Blue can't tap!
-  if (_activePowerUpRed == 'shield') return;
+    // Red has a shield? Then Blue can't tap!
+    if (_activePowerUpRed == 'shield') return;
 
-  int power = _blueDoubleTapCount > 0 ? 2 : 1;
-  setState(() {
-    _flexBlue = (_flexBlue + power).clamp(0, 20);
-    _flexRed = (_flexRed - power).clamp(0, 20);
+    int power = _blueDoubleTapCount > 0 ? 2 : 1;
+    setState(() {
+      _flexBlue = (_flexBlue + power).clamp(0, 20);
+      _flexRed = (_flexRed - power).clamp(0, 20);
 
-    if (_blueDoubleTapCount > 0) {
-      _blueDoubleTapCount--;
-      if (_blueDoubleTapCount == 0) _activePowerUpBlue = '';
+      if (_blueDoubleTapCount > 0) {
+        _blueDoubleTapCount--;
+        if (_blueDoubleTapCount == 0) _activePowerUpBlue = '';
+      }
+
+      _checkWinner();
+    });
+  }
+
+  void _checkWinner() {
+    if (_flexRed == 20) {
+      setState(() => _winner = 'Red Wins!');
+      _maybeShowAd();
+      _powerUpVisible = false;
+      _activePowerUpRed = '';
+      _activePowerUpBlue = '';
     }
-
-    _checkWinner();
-  });
-}
-
-
-void _checkWinner() {
-  if (_flexRed == 20) {
-    setState(() => _winner = 'Red Wins!');
-    _maybeShowAd();
-     _powerUpVisible = false;
-    _activePowerUpRed = '';
-    _activePowerUpBlue = '';
+    if (_flexBlue == 20) {
+      setState(() => _winner = 'Blue Wins!');
+      _maybeShowAd();
+      _powerUpVisible = false;
+      _activePowerUpRed = '';
+      _activePowerUpBlue = '';
+    }
   }
-  if (_flexBlue == 20) {
-    setState(() => _winner = 'Blue Wins!');
-    _maybeShowAd();
-     _powerUpVisible = false;
-    _activePowerUpRed = '';
-    _activePowerUpBlue = '';
-  }
-}
-
-
 
   Widget _buildPowerUpIcon(String type) {
     IconData icon;
@@ -343,7 +335,8 @@ void _checkWinner() {
                               left: _powerUpBluePosition.dx,
                               top: 20,
                               child: GestureDetector(
-                                onTap: () => _collectPowerUp('blue', _currentPowerUpBlue),
+                                onTap: () => _collectPowerUp(
+                                    'blue', _currentPowerUpBlue),
                                 child: _buildPowerUpIcon(_currentPowerUpBlue),
                               ),
                             ),
@@ -360,7 +353,9 @@ void _checkWinner() {
                                 child: Center(
                                   child: Transform.rotate(
                                     angle: 3.14159,
-                                    child: Text('Start', style: TextStyle(color: Colors.blue, fontSize: 20)),
+                                    child: Text('Start',
+                                        style: TextStyle(
+                                            color: Colors.blue, fontSize: 20)),
                                   ),
                                 ),
                               ),
@@ -386,7 +381,8 @@ void _checkWinner() {
                               left: _powerUpRedPosition.dx,
                               bottom: 20,
                               child: GestureDetector(
-                                onTap: () => _collectPowerUp('red', _currentPowerUpRed),
+                                onTap: () =>
+                                    _collectPowerUp('red', _currentPowerUpRed),
                                 child: _buildPowerUpIcon(_currentPowerUpRed),
                               ),
                             ),
@@ -401,7 +397,9 @@ void _checkWinner() {
                                   color: Colors.white,
                                 ),
                                 child: Center(
-                                  child: Text('Start', style: TextStyle(color: Colors.red, fontSize: 20)),
+                                  child: Text('Start',
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 20)),
                                 ),
                               ),
                             ),
@@ -414,103 +412,126 @@ void _checkWinner() {
               ],
             ),
             if (_winner.isNotEmpty)
-  Positioned.fill(
-    child: Stack(
-      children: [
-        AnimatedContainer(
-          duration: Duration(milliseconds: 500),
-          color: _winner.contains('Red') ? Colors.red : Colors.blue,
-          child: Center(
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: Center(
-                child: Transform.rotate(
-                  angle: _winner.contains('Blue') ? pi : 0,
-                  child: Text(
-                    _winner,
-                    style: TextStyle(
+              Positioned.fill(
+                child: Stack(
+                  children: [
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 500),
                       color: _winner.contains('Red') ? Colors.red : Colors.blue,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: Transform.rotate(
+                                angle: _winner.contains('Blue') ? pi : 0,
+                                child: Text(
+                                  _winner,
+                                  style: TextStyle(
+                                    color: _winner.contains('Red')
+                                        ? Colors.red
+                                        : Colors.blue,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Rematch
+                              Column(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.replay,
+                                        color: Colors.white, size: 32),
+                                    onPressed: () {
+                                      setState(() {
+                                        _gameStarted = false;
+                                        _winner = '';
+                                      });
+                                    },
+                                  ),
+                                  Text("Rematch",
+                                      style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                              const SizedBox(width: 40),
+                              // Home
+                              Column(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.home,
+                                        color: Colors.white, size: 32),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  Text("Home",
+                                      style: TextStyle(color: Colors.white)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (widget.mode == 'timer' && _gameStarted && _winner.isEmpty) ...[
+              // Blue Timer - Left Middle, facing down
+              Positioned(
+                left: 12,
+                top: MediaQuery.of(context).size.height / 2 - 24,
+                child: RotatedBox(
+                  quarterTurns: 2,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.65),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Text(
+                      '$_timeLeft s',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
 
-        // Home button after game ends with icon
-        Positioned(
-          bottom: 40,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pop(context); // Return to home screen
-              },
-              icon: Icon(Icons.home),
-              label: Text("Home", style: TextStyle(fontSize: 18)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+              // Red Timer - Right Middle, facing up
+              Positioned(
+                right: 12,
+                top: MediaQuery.of(context).size.height / 2 - 24,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.65),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Text(
+                    '$_timeLeft s',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
-            ),
-          ),
-        )
-      ],
-    ),
-  
-              ),
-            if (widget.mode == 'timer' && _gameStarted && _winner.isEmpty) ...[
-  // Blue Timer - Left Middle, facing down
-  Positioned(
-    left: 12,
-    top: MediaQuery.of(context).size.height / 2 - 24,
-    child: RotatedBox(
-      quarterTurns: 2,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.65),
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Text(
-          '$_timeLeft s',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-      ),
-    ),
-  ),
-
-  // Red Timer - Right Middle, facing up
-  Positioned(
-    right: 12,
-    top: MediaQuery.of(context).size.height / 2 - 24,
-    child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.65),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Text(
-        '$_timeLeft s',
-        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-      ),
-    ),
-  ),
-],
-
+            ],
           ],
         ),
       ),

@@ -414,54 +414,103 @@ void _checkWinner() {
               ],
             ),
             if (_winner.isNotEmpty)
-              Positioned.fill(
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
-                  color: _winner.contains('Red') ? Colors.red : Colors.blue,
-                  child: Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: Center(
-                        child: Transform.rotate(
-                          angle: _winner.contains('Blue') ? pi : 0,
-                          child: Text(
-                            _winner,
-                            style: TextStyle(
-                              color: _winner.contains('Red') ? Colors.red : Colors.blue,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+  Positioned.fill(
+    child: Stack(
+      children: [
+        AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          color: _winner.contains('Red') ? Colors.red : Colors.blue,
+          child: Center(
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Transform.rotate(
+                  angle: _winner.contains('Blue') ? pi : 0,
+                  child: Text(
+                    _winner,
+                    style: TextStyle(
+                      color: _winner.contains('Red') ? Colors.red : Colors.blue,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            if (widget.mode == 'timer' && _gameStarted && _winner.isEmpty)
-              Positioned(
-                top: 40,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      'Time Left: $_timeLeft s',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
+            ),
+          ),
+        ),
+
+        // Home button after game ends with icon
+        Positioned(
+          bottom: 40,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pop(context); // Return to home screen
+              },
+              icon: Icon(Icons.home),
+              label: Text("Home", style: TextStyle(fontSize: 18)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
+            ),
+          ),
+        )
+      ],
+    ),
+  
+              ),
+            if (widget.mode == 'timer' && _gameStarted && _winner.isEmpty) ...[
+  // Blue Timer - Left Middle, facing down
+  Positioned(
+    left: 12,
+    top: MediaQuery.of(context).size.height / 2 - 24,
+    child: RotatedBox(
+      quarterTurns: 2,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.65),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Text(
+          '$_timeLeft s',
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+      ),
+    ),
+  ),
+
+  // Red Timer - Right Middle, facing up
+  Positioned(
+    right: 12,
+    top: MediaQuery.of(context).size.height / 2 - 24,
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.65),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Text(
+        '$_timeLeft s',
+        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+      ),
+    ),
+  ),
+],
+
           ],
         ),
       ),

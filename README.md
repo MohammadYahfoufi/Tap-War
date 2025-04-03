@@ -28,9 +28,15 @@ A fast-paced 2-player tap battle built with **Flutter**. Pick your mode, tap you
 
 ## 📸 Screenshots
 
-| Home Screen | Battle | Victory Screen |
-|-------------|--------|----------------|
-| ![Home](screenshots/home.jpg) | ![Battle](screenshots/battle.jpg) | ![Win](screenshots/win.jpg) |
+## 📸 Screenshots
+
+| Home | Battle | Win | Timer |
+|------|--------|-----|-------|
+| ![Home](screenshots/home.jpg) | ![Battle](screenshots/battle.jpg) | ![Win](screenshots/win.jpg) | ![Timer](screenshots/timer.jpg) |
+
+| Power-Ups | Interstitial Ad |
+|-----------|-----------------|
+| ![PowerUps](screenshots/powerups.jpg) | ![Ad](screenshots/ad_interstitial.jpg) |
 
 ---
 

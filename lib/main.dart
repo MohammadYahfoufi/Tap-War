@@ -10,7 +10,7 @@ void main() async {
 
   UnityAds.init(
     gameId: '5823812',
-    testMode: true,
+    testMode: false,
   );
 
   UnityAds.load(placementId: 'Banner_Android');
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tap War',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       home: HomeScreen(),
     );
   }

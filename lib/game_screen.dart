@@ -35,6 +35,7 @@ class _GameScreenState extends State<GameScreen> {
   int _blueDoubleTapCount = 0;
   int _gamesPlayed = 0;
   bool _isAdReady = false;
+  bool _isAdPlaying = false;
 
   final List<String> _powerUpTypes = ['shield', 'boost', 'double'];
 
@@ -55,20 +56,41 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  void _maybeShowAd() {
-    if (_isAdReady) {
-      UnityAds.showVideoAd(placementId: 'Interstitial_Android');
-      _isAdReady = false;
+void _maybeShowAd() {
+  if (_isAdReady && !_isAdPlaying) {
+    setState(() => _isAdPlaying = true);
 
-      // Load next and assume ready after delay
-      UnityAds.load(placementId: 'Interstitial_Android');
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() => _isAdReady = true);
-      });
-    } else {
-      print('Interstitial not ready, skipping...');
-    }
+    UnityAds.showVideoAd(
+      placementId: 'Interstitial_Android',
+      onComplete: (placementId) {
+        setState(() => _isAdPlaying = false);
+        _proceedAfterAd();
+      },
+      onSkipped: (placementId) {
+        setState(() => _isAdPlaying = false);
+        _proceedAfterAd();
+      },
+      onFailed: (placementId, error, message) {
+        print("Ad failed: $message");
+        setState(() => _isAdPlaying = false);
+        _proceedAfterAd();
+      },
+    );
+  } else {
+    _proceedAfterAd();
   }
+}
+
+
+void _proceedAfterAd() {
+  setState(() {
+    _winner = _flexRed == 20 ? 'Red Wins!' : 'Blue Wins!';
+    _powerUpVisible = false;
+    _activePowerUpRed = '';
+    _activePowerUpBlue = '';
+  });
+}
+
 
   void _onGameEnd() {
     _gamesPlayed++;

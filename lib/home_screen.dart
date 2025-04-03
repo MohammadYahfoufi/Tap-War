@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unity_ads_plugin/unity_ads_plugin.dart'; // <-- Required import
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'game_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -97,11 +97,10 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // ✅ Unity Banner Ad
           Container(
             height: 50,
             child: UnityBannerAd(
-              placementId: 'Banner_Android', // from Unity Dashboard
+              placementId: 'Banner_Android',
               size: BannerSize.standard,
               onLoad: (placementId) {
                 print('Banner Ad Loaded: $placementId');

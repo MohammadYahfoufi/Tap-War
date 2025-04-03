@@ -1,28 +1,28 @@
 # ⚔️ Tap War
 
-A fast-paced 2-player tap battle built with Flutter. Pick a mode, smash your side, and dominate your opponent with power-ups!
+A fast-paced 2-player tap battle built with **Flutter**. Pick your mode, tap your side like crazy, and dominate your opponent using strategic power-ups!
 
 ---
 
 ## 🎮 Game Modes
 
-- 🧨 **Normal Mode** — Includes random power-ups:
-  - Shield 🛡️
-  - Boost ⚡
-  - Double Tap ✌️
-- 🚫 **No Power Mode** — Pure taps, no extras.
-- ⏱️ **Timer Mode** — 20 seconds of intense back-and-forth!
+- 🧨 **Normal Mode** – Features random power-ups:
+  - 🛡️ Shield (block opponent taps)
+  - ⚡ Boost (powerful tap advantage)
+  - ✌️ Double Tap (double strength for a few hits)
+- 🚫 **No Power Mode** – Just pure tapping speed. No boosts.
+- ⏱️ **Timer Mode** – 20 seconds of high-stakes tapping. Winner takes all.
 
 ---
 
 ## ✨ Features
 
-- Power-ups that change gameplay strategy
-- Win overlay with rematch and home buttons
-- Fire/spark tap animations ⚡
-- Unity Interstitial & Banner Ads
-- Rematch with a tap or via button
-- Clean UI with fast controls
+- Strategic Power-Ups & Reactive Gameplay
+- Rematch with tap or a dedicated button
+- Clean, minimal UI for fast play
+- ⚡ Fire/spark effects on taps
+- 🏆 Victory overlay with rematch + home buttons
+- 💰 Unity Ads (Interstitial & Banner)
 
 ---
 
@@ -32,9 +32,34 @@ A fast-paced 2-player tap battle built with Flutter. Pick a mode, smash your sid
 |-------------|--------|----------------|
 | ![Home](screenshots/home.jpg) | ![Battle](screenshots/battle.jpg) | ![Win](screenshots/win.jpg) |
 
+---
 
 ## 📦 Built With
 
-- **Flutter**
-- **Unity Ads** (`unity_ads_plugin`)
-- **Dart**
+- [Flutter](https://flutter.dev)
+- [Dart](https://dart.dev)
+- [Unity Ads Plugin](https://pub.dev/packages/unity_ads_plugin)
+
+---
+
+## 🚀 Coming Soon
+
+- Google Play release  
+- Local leaderboard  
+- AI bot mode (practice solo)  
+- Sound effects & haptic feedback
+
+---
+
+## 💡 Wanna Contribute?
+
+Pull requests welcome! Ideas? Drop an issue.  
+This game was built for fun, but we’re open to evolving it with the community.
+
+---
+
+## ©️ License
+
+MIT License  
+Made with ❤️ by [Mohammad Yahfoufi]
+

@@ -47,7 +47,7 @@ class _GameScreenState extends State<GameScreen> {
       _startCountdown();
     }
 
-    UnityAds.init(gameId: '5823812', testMode: true);
+    UnityAds.init(gameId: '5823812', testMode: false);
     UnityAds.load(placementId: 'Interstitial_Android');
 
     // Simulate readiness

@@ -41,7 +41,3 @@ A fast-paced 2-player tap battle built with Flutter. Pick a mode, smash your sid
 - **Flutter**
 - **Unity Ads** (`unity_ads_plugin`)
 - **Dart**
-
----
-
-## 🚀 How to Run

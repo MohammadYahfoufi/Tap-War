@@ -1,16 +1,47 @@
-# taps_war
+# ⚔️ Tap War
 
-A new Flutter project.
+A fast-paced 2-player tap battle built with Flutter. Pick a mode, smash your side, and dominate your opponent with power-ups!
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🎮 Game Modes
 
-A few resources to get you started if this is your first Flutter project:
+- 🧨 **Normal Mode** — Includes random power-ups:
+  - Shield 🛡️
+  - Boost ⚡
+  - Double Tap ✌️
+- 🚫 **No Power Mode** — Pure taps, no extras.
+- ⏱️ **Timer Mode** — 20 seconds of intense back-and-forth!
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ✨ Features
+
+- Power-ups that change gameplay strategy
+- Win overlay with rematch and home buttons
+- Fire/spark tap animations ⚡
+- Unity Interstitial & Banner Ads
+- Rematch with a tap or via button
+- Clean UI with fast controls
+
+---
+
+## 📸 Screenshots
+
+| Home Screen | Battle | Victory Screen |
+|-------------|--------|----------------|
+| ![Home](screenshots/home.png) | ![Battle](screenshots/battle.png) | ![Win](screenshots/win.png) |
+
+> 💡 Screenshots are located in `/screenshots` folder. You can update them anytime!
+
+---
+
+## 📦 Built With
+
+- **Flutter**
+- **Unity Ads** (`unity_ads_plugin`)
+- **Dart**
+
+---
+
+## 🚀 How to Run

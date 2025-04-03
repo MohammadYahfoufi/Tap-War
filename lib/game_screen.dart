@@ -244,63 +244,71 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  Widget _buildPowerUpIcon(String type) {
-    IconData icon;
-    switch (type) {
-      case 'shield':
-        icon = Icons.shield;
-        break;
-      case 'boost':
-        icon = Icons.flash_on;
-        break;
-      case 'double':
-        icon = Icons.exposure_plus_2;
-        break;
-      default:
-        icon = Icons.help_outline;
-    }
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.yellow.withOpacity(0.8),
-      ),
-      child: Icon(icon, color: Colors.white, size: 30),
-    );
+  Widget _buildPowerUpIcon(String type, {bool rotate = false}) {
+  IconData icon;
+  switch (type) {
+    case 'shield':
+      icon = Icons.shield;
+      break;
+    case 'boost':
+      icon = Icons.flash_on;
+      break;
+    case 'double':
+      icon = Icons.exposure_plus_2;
+      break;
+    default:
+      icon = Icons.help_outline;
   }
 
-  Widget _buildPowerUpEffect(String type) {
-    IconData icon;
-    Color color;
-    switch (type) {
-      case 'shield':
-        icon = Icons.shield;
-        color = Colors.white;
-        break;
-      case 'boost':
-        icon = Icons.flash_on;
-        color = Colors.orange;
-        break;
-      case 'double':
-        icon = Icons.exposure_plus_2;
-        color = Colors.purpleAccent;
-        break;
-      default:
-        return Container();
-    }
-    return Center(
-      child: Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: color.withOpacity(0.2),
-        ),
-        child: Icon(icon, color: Colors.white, size: 60),
-      ),
-    );
+  Widget iconWidget = Container(
+    width: 60,
+    height: 60,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.yellow.withOpacity(0.8),
+    ),
+    child: Icon(icon, color: Colors.white, size: 30),
+  );
+
+  return rotate ? Transform.rotate(angle: pi, child: iconWidget) : iconWidget;
+}
+
+
+  Widget _buildPowerUpEffect(String type, {bool rotate = false}) {
+  IconData icon;
+  Color color;
+  switch (type) {
+    case 'shield':
+      icon = Icons.shield;
+      color = Colors.white;
+      break;
+    case 'boost':
+      icon = Icons.flash_on;
+      color = Colors.orange;
+      break;
+    case 'double':
+      icon = Icons.exposure_plus_2;
+      color = Colors.purpleAccent;
+      break;
+    default:
+      return Container();
   }
+
+  Widget effect = Center(
+    child: Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withOpacity(0.2),
+      ),
+      child: Icon(icon, color: Colors.white, size: 60),
+    ),
+  );
+
+  return rotate ? Transform.rotate(angle: pi, child: effect) : effect;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +337,7 @@ class _GameScreenState extends State<GameScreen> {
                       child: Stack(
                         children: [
                           if (_activePowerUpBlue.isNotEmpty)
-                            _buildPowerUpEffect(_activePowerUpBlue),
+                            _buildPowerUpEffect(_activePowerUpBlue, rotate: true),
                           if (_powerUpVisible && widget.mode == 'normal')
                             Positioned(
                               left: _powerUpBluePosition.dx,
@@ -337,7 +345,7 @@ class _GameScreenState extends State<GameScreen> {
                               child: GestureDetector(
                                 onTap: () => _collectPowerUp(
                                     'blue', _currentPowerUpBlue),
-                                child: _buildPowerUpIcon(_currentPowerUpBlue),
+                                child: _buildPowerUpIcon(_currentPowerUpBlue, rotate: true),
                               ),
                             ),
                           Center(

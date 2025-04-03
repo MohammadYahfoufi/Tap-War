@@ -30,7 +30,7 @@ A fast-paced 2-player tap battle built with Flutter. Pick a mode, smash your sid
 
 | Home Screen | Battle | Victory Screen |
 |-------------|--------|----------------|
-| ![Home](screenshots/home.png) | ![Battle](screenshots/battle.png) | ![Win](screenshots/win.png) |
+| ![Home](screenshots/home.jpg) | ![Battle](screenshots/battle.jpg) | ![Win](screenshots/win.jpg) |
 
 > 💡 Screenshots are located in `/screenshots` folder. You can update them anytime!
 

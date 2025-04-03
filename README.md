@@ -61,5 +61,5 @@ This game was built for fun, but we’re open to evolving it with the community.
 ## ©️ License
 
 MIT License  
-Made with ❤️ by [Mohammad Yahfoufi]
+Made with ❤️ by Mohammad Yahfoufi
 

@@ -32,9 +32,6 @@ A fast-paced 2-player tap battle built with Flutter. Pick a mode, smash your sid
 |-------------|--------|----------------|
 | ![Home](screenshots/home.jpg) | ![Battle](screenshots/battle.jpg) | ![Win](screenshots/win.jpg) |
 
-> 💡 Screenshots are located in `/screenshots` folder. You can update them anytime!
-
----
 
 ## 📦 Built With
 

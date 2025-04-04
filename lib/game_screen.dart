@@ -18,11 +18,9 @@ class _GameScreenState extends State<GameScreen> {
   String _winner = '';
   bool _canRestartGame = true;
 
-  // Timer Mode
   int _timeLeft = 20;
   bool _timerRunning = false;
 
-  // Power-Up logic
   final Random _random = Random();
   bool _powerUpVisible = false;
   Offset _powerUpRedPosition = Offset(100, 500);
@@ -50,7 +48,6 @@ class _GameScreenState extends State<GameScreen> {
     UnityAds.init(gameId: '5823812', testMode: false);
     UnityAds.load(placementId: 'Interstitial_Android');
 
-    // Simulate readiness
     Future.delayed(Duration(seconds: 3), () {
       setState(() => _isAdReady = true);
     });
@@ -144,8 +141,8 @@ void _proceedAfterAd() {
     });
 
     if (widget.mode == 'normal') {
-      _spawnPowerUp(); // spawn the first one immediately
-      _schedulePowerUpSpawn(); // then schedule the next ones
+      _spawnPowerUp();
+      _schedulePowerUpSpawn();
     }
 
     if (widget.mode == 'timer') {
@@ -214,7 +211,6 @@ void _proceedAfterAd() {
   }
 
   void _increaseRed() {
-    // Blue has a shield? Then Red can't tap!
     if (_activePowerUpBlue == 'shield') return;
 
     int power = _redDoubleTapCount > 0 ? 2 : 1;
@@ -232,7 +228,6 @@ void _proceedAfterAd() {
   }
 
   void _increaseBlue() {
-    // Red has a shield? Then Blue can't tap!
     if (_activePowerUpRed == 'shield') return;
 
     int power = _blueDoubleTapCount > 0 ? 2 : 1;
@@ -478,7 +473,6 @@ void _proceedAfterAd() {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // Rematch
                               Column(
                                 children: [
                                   IconButton(
@@ -496,7 +490,6 @@ void _proceedAfterAd() {
                                 ],
                               ),
                               const SizedBox(width: 40),
-                              // Home
                               Column(
                                 children: [
                                   IconButton(
@@ -519,7 +512,6 @@ void _proceedAfterAd() {
                 ),
               ),
             if (widget.mode == 'timer' && _gameStarted && _winner.isEmpty) ...[
-              // Blue Timer - Left Middle, facing down
               Positioned(
                 left: 12,
                 top: MediaQuery.of(context).size.height / 2 - 24,
@@ -542,7 +534,6 @@ void _proceedAfterAd() {
                 ),
               ),
 
-              // Red Timer - Right Middle, facing up
               Positioned(
                 right: 12,
                 top: MediaQuery.of(context).size.height / 2 - 24,

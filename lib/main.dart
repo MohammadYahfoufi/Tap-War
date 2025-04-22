@@ -9,7 +9,7 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   UnityAds.init(
-    gameId: '5823812',
+    gameId: '5823***',
     testMode: false,
   );
 
